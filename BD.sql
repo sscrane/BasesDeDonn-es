@@ -1,0 +1,14 @@
+-- suppression des tables précédentes
+
+DROP TABLE IF EXISTS Navires;
+DROP TABLE IF EXISTS Voyages;
+DROP TABLE IF EXISTS Etapes_Transitoires;
+DROP TABLE IF EXISTS Ports;
+DROP TABLE IF EXISTS Quantite;
+DROP TABLE IF EXISTS Produits;
+DROP TABLE IF EXISTS Perissable;
+DROP TABLE IF EXISTS Sec;
+DROP TABLE IF EXISTS Personnes;
+DROP TABLE IF EXISTS Nations;
+DROP TABLE IF EXISTS RelationsDiplomatic;
+DROP TABLE IF EXISTS Capturer;
