@@ -1,60 +1,89 @@
 -- suppression des tables précédentes
-
-DROP TABLE IF EXISTS Navires;
-DROP TABLE IF EXISTS Voyages;
-DROP TABLE IF EXISTS Etapes_Transitoires;
-DROP TABLE IF EXISTS Ports_;
-DROP TABLE IF EXISTS Quantite;
-DROP TABLE IF EXISTS Produits;
+DROP TABLE IF EXISTS Personnes;
 DROP TABLE IF EXISTS Perissable;
 DROP TABLE IF EXISTS Sec;
-DROP TABLE IF EXISTS Personnes;
+DROP TABLE IF EXISTS Quantite;
+DROP TABLE IF EXISTS Produits;
+DROP TABLE IF EXISTS Etapes_Transitoires;
+DROP TABLE IF EXISTS Voyages;
+DROP TABLE IF EXISTS Navires;
+DROP TABLE IF EXISTS Ports_;
 DROP TABLE IF EXISTS Nations;
-DROP TABLE IF EXISTS RelationsDiplomatic;
-DROP TABLE IF EXISTS Capturer;
 
+CREATE TABLE Nations (
+    Nation_nom VARCHAR(30) PRIMARY KEY,
+    Continent VARCHAR(30)
+);
 
-COPY Navires(Navire_type, Taille_categorie, Volume, Nombre_passager, Initial_propietaire)
-FROM '[path]'
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Ports_(
+Nom VARCHAR(30) PRIMARY KEY,
+Longitude INT,
+Latitude INT,
+Nationalite VARCHAR(30), 
+Taille_categorie INTEGER CHECK (Taille_categorie BETWEEN 1 AND 5) NOT NULL,
+FOREIGN KEY (Nom) REFERENCES Nations(Nation_nom) 
+);
 
-COPY Voyages(NavireID, Date_debut, Date_fin, Destination, Type_voyage, Classe_voyage)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Navires(
+    NavireID SERIAL PRIMARY KEY,
+    Navire_type VARCHAR(30),
+    Taille_categorie INTEGER CHECK (Taille_categorie BETWEEN 1 AND 5) NOT NULL, 
+    Volume INT NOT NULL,
+    Nombre_passagers INT NOT NULL,
+    Initial_propietaire VARCHAR(30),
+    FOREIGN KEY (Initial_propietaire) REFERENCES NATIONS(Nation_nom)
+);
 
-COPY Etapes_Transitoires(Etape_numero, Date_debut, NavireID)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Voyages(
+    NavireID INT,
+    Date_debut DATE,
+    Date_fin DATE,
+    Destination VARCHAR(30),
+    Type_voyage VARCHAR(30) CHECK (Type_voyage IN ('Court', 'Moyen', 'Long')),
+    Classe_voyage VARCHAR(30) CHECK (Classe_voyage IN ('Europe', 'Amérique', 'Asie', 'Intercontinental')),
+    FOREIGN KEY (NavireID) REFERENCES Navires(NavireID),
+    FOREIGN KEY (Destination) REFERENCES Ports_(Nom),
+    PRIMARY KEY (Date_debut, NavireID),
+    CHECK (Date_debut < Date_fin)
+);
 
-COPY Ports_(Nom, Localisation, Nationalite, Nations)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Etapes_Transitoires(
+    Etape_numero INT PRIMARY KEY,
+    Date_debut DATE, 
+    NavireID INT,
+    FOREIGN KEY (NavireID, Date_debut) REFERENCES Navires(NavireID)
+    (--Date_debut) REFERENCES Voyages(Date_debut) --TODO: Weak connection
+);
 
-COPY Quantite(Nom, Localisation, Nationalite, Nations)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Produits(
+    ProduitsID SERIAL PRIMARY KEY,
+    TypeProduit VARCHAR (30) CHECK (TypeProduit IN ('Perissable', 'Sec', 'Personnes')),
+    Nom VARCHAR(30)
+);
 
-COPY Produits(TypeProduit, Nom)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Quantite(
+    Etape_numero SERIAL PRIMARY KEY,
+    Date_debut DATE,
+    NavireID INT,
+    ProduitsID INT,
+    FOREIGN KEY(ProduitsID) REFERENCES Produits(ProduitsID),
+    FOREIGN KEY(NavireID) REFERENCES Navires(NavireID)
+);
 
-COPY Perissable(Date_conservation, Volume)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Perissable(
+    ProduitsID INT PRIMARY KEY,
+    Date_conservation DATE,
+    Volume INT,
+    FOREIGN KEY(ProduitsID) REFERENCES Produits(ProduitsID)
+);
 
-COPY Sec(Volume)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Sec(
+    ProduitsID INT PRIMARY KEY,
+    Volume INT,
+    FOREIGN KEY(ProduitsID) REFERENCES Produits(ProduitsID)
+);
 
-COPY Nations(Nation_nom, Continent)
-FROM ''
-DELIMITER ','
-CSV HEADER;
+CREATE TABLE Personnes(
+    ProduitsID INT PRIMARY KEY,
+    FOREIGN KEY(ProduitsID) REFERENCES Produits(ProduitsID)
+);
