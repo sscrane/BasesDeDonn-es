@@ -1,9 +1,9 @@
 
 COPY Navires(Navire_type, Taille_categorie, Volume, Nombre_passager, Initial_propietaire)
-FROM '[path]'
+FROM '/Users/sophiecrane/BasesDonnees/Données - Navire.csv'
 DELIMITER ','
 CSV HEADER;
-
+/*
 COPY Voyages(NavireID, Date_debut, Date_fin, Destination, Type_voyage, Classe_voyage)
 FROM ''
 DELIMITER ','
@@ -42,4 +42,4 @@ CSV HEADER;
 COPY Nations(Nation_nom, Continent)
 FROM ''
 DELIMITER ','
-CSV HEADER;
+CSV HEADER;*/
