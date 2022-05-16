@@ -17,11 +17,11 @@ CREATE TABLE Nations (
 
 CREATE TABLE Ports_(
 Nom VARCHAR(30) PRIMARY KEY,
-Longitude INT,
-Latitude INT,
+Longitude DECIMAL,
+Latitude DECIMAL,
 Nationalite VARCHAR(30), 
 Taille_categorie INTEGER CHECK (Taille_categorie BETWEEN 1 AND 5) NOT NULL,
-FOREIGN KEY (Nom) REFERENCES Nations(Nation_nom) 
+FOREIGN KEY (Nationalite) REFERENCES Nations(Nation_nom) 
 );
 
 CREATE TABLE Navires(
@@ -48,17 +48,19 @@ CREATE TABLE Voyages(
 );
 
 CREATE TABLE Etapes_Transitoires(
-    Etape_numero INT PRIMARY KEY,
+    Etape_numero INT,
     Date_debut DATE, 
     NavireID INT,
-    FOREIGN KEY (NavireID, Date_debut) REFERENCES Navires(NavireID)
-    (--Date_debut) REFERENCES Voyages(Date_debut) --TODO: Weak connection
+    PRIMARY KEY(Etape_numero, Date_debut, NavireID),
+    FOREIGN KEY (NavireID) REFERENCES Navires(NavireID),
+    FOREIGN KEY (Date_debut) REFERENCES Voyages(Date_debut)
+    --TODO: Weak connection
 );
 
 CREATE TABLE Produits(
     ProduitsID SERIAL PRIMARY KEY,
-    TypeProduit VARCHAR (30) CHECK (TypeProduit IN ('Perissable', 'Sec', 'Personnes')),
-    Nom VARCHAR(30)
+    Nom VARCHAR(30),
+    TypeProduit VARCHAR (30) CHECK (TypeProduit IN ('Perissable', 'Sec', 'Personnes'))
 );
 
 CREATE TABLE Quantite(
@@ -72,7 +74,7 @@ CREATE TABLE Quantite(
 
 CREATE TABLE Perissable(
     ProduitsID INT PRIMARY KEY,
-    Date_conservation DATE,
+    Date_conservation VARCHAR (30),
     Volume INT,
     FOREIGN KEY(ProduitsID) REFERENCES Produits(ProduitsID)
 );
