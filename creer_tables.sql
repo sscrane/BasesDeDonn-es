@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS voyages;
 DROP TABLE IF EXISTS navires;
 DROP TABLE IF EXISTS ports_;
 DROP TABLE IF EXISTS nations;
+DROP TABLE IF EXISTS relations_diplomatiques;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -101,4 +102,13 @@ CREATE TABLE capturer (
     FOREIGN KEY(navireID) REFERENCES navires(navireID),
     FOREIGN KEY(nationalite) REFERENCES nations(nationalite),
     PRIMARY KEY(navireID, date_of_capture)
+);
+
+CREATE TABLE relations_diplomatiques (
+    nation1 VARCHAR(30),
+    nation2 VARCHAR(30),
+    relation_diplomatique VARCHAR(30) 
+        CHECK (relation_diplomatique IN ('allies commerciaux', 'allies', 'neutres', 'en guerre')),
+    date_debut DATE,
+    PRIMARY KEY(nation1,nation2,date_debut)
 );
