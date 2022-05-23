@@ -29,8 +29,8 @@ CREATE TABLE Navires(
     NavireID SERIAL PRIMARY KEY,
     Navire_type VARCHAR(30),
     Taille_categorie INTEGER CHECK (Taille_categorie BETWEEN 1 AND 5) NOT NULL, 
-    Volume INT NOT NULL,
-    Nombre_passagers INT NOT NULL,
+    Volume INT NOT NULL CHECK (Volume >= 0),
+    Nombre_passagers INT NOT NULL CHECK (Nombre_passagers >= 0),
     Initial_propietaire VARCHAR(30),
     FOREIGN KEY (Initial_propietaire) REFERENCES NATIONS(Nationalite)
 );
