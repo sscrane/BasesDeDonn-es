@@ -48,17 +48,16 @@ CREATE TABLE voyages(
     CHECK (date_debut < date_fin)
 );
 
-/*CREATE TABLE Etapes_Transitoires(
-    Etape_numero INT,
-    Date_debut DATE, 
-    NavireID INT,
-    Etape VARCHAR(30),
-    PRIMARY KEY(Etape_numero, Date_debut, NavireID),
-    FOREIGN KEY (NavireID) REFERENCES Navires(NavireID),
-    FOREIGN KEY (Date_debut) REFERENCES Voyages(Date_debut),
-    FOREIGN KEY (Etape) REFERENCES Ports_(Nom)
-    --TODO: Weak connection
-);*/
+CREATE TABLE etapes_transitoires(
+    etape_numero INT,
+    date_debut DATE, 
+    navireID INT,
+    port_nom VARCHAR(30),
+    PRIMARY KEY(etape_numero, date_debut, navireID),
+    FOREIGN KEY (navireID, date_debut) 
+        REFERENCES voyages (navireID, date_debut),
+    FOREIGN KEY (port_nom) REFERENCES ports_(nom)
+);
 
 CREATE TABLE produits(
     produitsID SERIAL PRIMARY KEY,
@@ -80,25 +79,26 @@ CREATE TABLE quantite(
 CREATE TABLE perissable(
     produitsID INT PRIMARY KEY,
     date_conservation INTERVAL, --ex: SELECT date_conservation + DATE('2020-02-02') FROM Perissable;
-    volume INT,
+    volume INT CHECK (volume>0),
     FOREIGN KEY(produitsID) REFERENCES produits(produitsID)
 );
 
 CREATE TABLE sec(
     produitsID INT PRIMARY KEY,
-    volume INT,
+    volume INT CHECK (volume>0),
     FOREIGN KEY(produitsID) REFERENCES produits(produitsID)
 );
 
-CREATE TABLE personnes(
+/*CREATE TABLE personnes(
     produitsID INT PRIMARY KEY,
     FOREIGN KEY(produitsID) REFERENCES produits(produitsID)
-);
+);*/
 
 CREATE TABLE capturer (
     date_of_capture DATE,
     navireID INT,
     nationalite VARCHAR(30),
     FOREIGN KEY(navireID) REFERENCES navires(navireID),
-    FOREIGN KEY(nationalite) REFERENCES nations(nationalite)
+    FOREIGN KEY(nationalite) REFERENCES nations(nationalite),
+    PRIMARY KEY(navireID, date_of_capture)
 );
