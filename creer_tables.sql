@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS ports_;
 DROP TABLE IF EXISTS nations;
 DROP TABLE IF EXISTS relations_diplomatiques;
 DROP FUNCTION IF EXISTS pleine_cale_ou_max_passagers;
+DROP FUNCTION IF EXISTS deux_semaines_entre_voyages;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -50,6 +51,33 @@ CREATE TABLE voyages(
     CHECK (date_debut < date_fin)
 );
 
+create function deux_semaines_entre_voyages()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+    SELECT COUNT(*) 
+    FROM voyages AS v 
+    WHERE EXISTS (
+        SELECT * FROM voyages AS v2
+        JOIN voyages AS v3 ON v2.navireID = v3.navireID
+        WHERE v.navireID = v2.navireID
+        AND v2.date_fin + INTERVAL '2 week' > v3.date_debut
+        AND v2.date_debut <> v3.date_debut
+        AND v2.date_debut < v3.date_debut
+    )
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT deux_semaines_entre_voyages
+CHECK (deux_semaines_entre_voyages() = 0);
+
 CREATE TABLE etapes_transitoires(
     etape_numero INT,
     date_debut DATE, 
@@ -79,9 +107,11 @@ begin
         -- calculate total volume of cargo
         SELECT SUM(*) FROM (
             -- list of quantite * volume of product
-            SELECT q3.quantite * p2.volume
+            SELECT q3.quantite * per.volume * sec.volume
             FROM quantite AS q3 
             JOIN produits AS p2 ON q3.produitsID = p2.produitsID
+            JOIN perissable AS per ON p2.produitsID = per.produitsID
+            JOIN sec AS sec ON p2.produitsID = sec.produitsID
             WHERE q3.navireID = e.navireID
             AND q3.date_debut = e.date_debut
             AND q3.etape_numero = e.etape_numero
