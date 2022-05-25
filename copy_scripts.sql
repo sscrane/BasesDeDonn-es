@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS nations_temp;
 DROP TABLE IF EXISTS voyages_temp;
+DROP TABLE IF EXISTS navires_temp;
 
 CREATE TEMPORARY TABLE nations_temp
    (
@@ -18,10 +19,24 @@ SELECT nationalite, continent
 FROM nations_temp
 ;
 
-COPY navires(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
+CREATE TEMPORARY TABLE navires_temp
+   (
+    navire_type VARCHAR(30),
+    taille_categorie INT, 
+    volume INT ,
+    nombre_passagers INT ,
+    initial_propietaire VARCHAR(30)
+   );
+
+COPY navires_temp(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
 FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Navire.csv'
 DELIMITER ','
 --CSV HEADER
+;
+
+INSERT INTO navires(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
+SELECT navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire
+FROM navires_temp
 ;
 
 COPY ports_(nom, longitude, latitude, nationalite, taille_categorie)
