@@ -1,0 +1,1 @@
+-- une jointure externe (LEFT JOIN, RIGHT JOIN ou FULL JOIN) ;

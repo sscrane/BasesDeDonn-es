@@ -1,0 +1,1 @@
+-- deux requˆetes ´equivalentes exprimant une condition de totalit´e, l’une avec de l’agr´egation

@@ -1,0 +1,1 @@
+--– une sous-requˆete dans le FROM ;

@@ -1,0 +1,1 @@
+-- deux agr´egats n´ecessitant GROUP BY et HAVING ;
