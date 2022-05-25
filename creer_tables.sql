@@ -14,6 +14,7 @@ DROP TABLE IF EXISTS relations_diplomatiques;
 DROP FUNCTION IF EXISTS pleine_cale_ou_max_passagers;
 DROP FUNCTION IF EXISTS deux_semaines_entre_voyages;
 DROP FUNCTION IF EXISTS produits_verification;
+DROP FUNCTION IF EXISTS intercontinental_taille_5;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -52,6 +53,36 @@ CREATE TABLE voyages(
     CHECK (date_debut < date_fin)
 );
 
+-- check for intercontinental voyages are done by ships of taille 5
+
+create function intercontinental_taille_5()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+    -- select number of voyages that are not short and contain cargo that is perissable
+    SELECT COUNT(*)
+    FROM voyages AS v
+    WHERE v.classe_voyage = 'Intercontinental'
+    AND EXISTS (
+        SELECT * FROM voyages AS v2 
+        NATURAL JOIN navires AS n
+        WHERE v2.navireID = v.navireID AND v2.date_debut = v.date_debut
+        AND n.taille_categorie <5
+    )
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT intercontinental_taille_5
+CHECK (intercontinental_taille_5() = 0);
+
+---------------------------------------------
 
 create function produits_verification()
    returns INT 
@@ -83,7 +114,6 @@ ADD CONSTRAINT produits_verification
 CHECK (produits_verification() = 0);
 
 ---------------------------------------------
-
 
 create function deux_semaines_entre_voyages()
    returns INT 
