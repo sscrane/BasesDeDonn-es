@@ -15,6 +15,7 @@ DROP FUNCTION IF EXISTS pleine_cale_ou_max_passagers;
 DROP FUNCTION IF EXISTS deux_semaines_entre_voyages;
 DROP FUNCTION IF EXISTS produits_verification;
 DROP FUNCTION IF EXISTS intercontinental_taille_5;
+DROP FUNCTION IF EXISTS taille_port_navire;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -53,7 +54,45 @@ CREATE TABLE voyages(
     CHECK (date_debut < date_fin)
 );
 
--- check for intercontinental voyages are done by ships of taille 5
+---------------------------------------------
+
+create function taille_port_navire()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+    SELECT COUNT(*)
+    FROM voyages AS v
+    WHERE EXISTS (
+        -- destination is smaller than ship size 
+        SELECT * FROM voyages AS v2
+        NATURAL JOIN navires AS n
+        JOIN ports_ AS p ON v2.destination = p.nom
+        WHERE v2.navireID = v.navireID AND v2.date_debut = v.date_debut
+        AND p.taille_categorie < n.taille_categorie
+    ) OR EXISTS (
+        -- etape 1 port is smaller than ship size
+        SELECT * FROM etapes_transitoires AS e
+        NATURAL JOIN navires AS n
+        JOIN ports_ AS p ON e.port_nom = p.nom
+        WHERE e.etape_numero = 1
+        AND e.date_debut = v.date_debut AND e.navireID = v.navireID
+        AND p.taille_categorie < n.taille_categorie
+
+    )
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT taille_port_navire
+CHECK (taille_port_navire() = 0);
+
+---------------------------------------------
 
 create function intercontinental_taille_5()
    returns INT 
@@ -63,7 +102,6 @@ $$
 begin
 
 return (
-    -- select number of voyages that are not short and contain cargo that is perissable
     SELECT COUNT(*)
     FROM voyages AS v
     WHERE v.classe_voyage = 'Intercontinental'
@@ -146,7 +184,7 @@ CREATE TABLE etapes_transitoires(
     etape_numero INT,
     date_debut DATE, 
     navireID INT,
-    port_nom VARCHAR(30),
+    port_nom VARCHAR(30), -- THIS IS THE PORT THE SHIP STARTS AT
     PRIMARY KEY(etape_numero, date_debut, navireID),
     FOREIGN KEY (navireID, date_debut) 
         REFERENCES voyages (navireID, date_debut),
