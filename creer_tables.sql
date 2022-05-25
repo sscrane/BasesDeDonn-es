@@ -16,6 +16,7 @@ DROP FUNCTION IF EXISTS deux_semaines_entre_voyages;
 DROP FUNCTION IF EXISTS produits_verification;
 DROP FUNCTION IF EXISTS intercontinental_taille_5;
 DROP FUNCTION IF EXISTS taille_port_navire;
+DROP FUNCTION IF EXISTS non_en_guerre;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -53,6 +54,79 @@ CREATE TABLE voyages(
     PRIMARY KEY (date_debut, navireID),
     CHECK (date_debut < date_fin)
 );
+
+---------------------------------------------
+
+-- Check that for ship of nation X arriving at/departing from nation Y, that the most recent relation between X and Y isn’t ‘en guerre’
+
+create function non_en_guerre()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+   SELECT COUNT(*) FROM voyages AS v
+   JOIN ports_ AS p ON v.destination = p.nom
+   JOIN etapes_transitoires AS e ON v.navireID = e.navireID AND v.date_debut = e.date_debut AND e.etape_numero = 1
+   JOIN ports_ AS p2 ON e.port_nom = p2.nom
+   WHERE p.nationalite IN (
+       -- list of countries that the voyage navire's country is "en guerre" with
+        SELECT r1.nation2 
+        FROM navires AS n 
+        JOIN capturer AS c ON n.navireID = c.navireID
+        JOIN relations_diplomatiques AS r1 ON r1.nation1 = c.nationalite
+        WHERE v.navireID = n.navireID
+        AND c.date_of_capture = (SELECT MAX(c5.date_of_capture) FROM capturer AS c5 WHERE c5.navireID = c.navireID AND c5.date_of_capture < v.date_debut)
+        AND r1.relation_diplomatique = 'en guerre' 
+        AND r1.date_debut = (SELECT MAX(r5.date_debut) FROM relations_diplomatiques AS r5 WHERE r5.nation1 = r1.nation1 AND r5.nation2 = r1.nation2 AND r5.date_debut < v.date_debut)
+
+        UNION
+
+        SELECT r2.nation1 FROM navires AS n 
+        JOIN capturer AS c ON n.navireID = c.navireID
+        JOIN relations_diplomatiques AS r2 ON r2.nation2 = c.nationalite
+        WHERE v.navireID = n.navireID
+        AND c.date_of_capture = (SELECT MAX(c5.date_of_capture) FROM capturer AS c5 WHERE c5.navireID = c.navireID AND c5.date_of_capture < v.date_debut)
+        AND r2.relation_diplomatique = 'en guerre' 
+        AND r2.date_debut = (SELECT MAX(r5.date_debut) FROM relations_diplomatiques AS r5 WHERE r5.nation1 = r2.nation1 AND r5.nation2 = r2.nation2 AND r5.date_debut < v.date_debut)
+
+        )
+    
+    OR p2.nationalite IN (
+        -- list of countries that the voyage navire's country is "en guerre" with
+        SELECT r1.nation2 
+        FROM navires AS n 
+        JOIN capturer AS c ON n.navireID = c.navireID
+        JOIN relations_diplomatiques AS r1 ON r1.nation1 = c.nationalite
+        WHERE v.navireID = n.navireID
+        AND c.date_of_capture = (SELECT MAX(c5.date_of_capture) FROM capturer AS c5 WHERE c5.navireID = c.navireID AND c5.date_of_capture < v.date_debut)
+        AND r1.relation_diplomatique = 'en guerre' 
+        AND r1.date_debut = (SELECT MAX(r5.date_debut) FROM relations_diplomatiques AS r5 WHERE r5.nation1 = r1.nation1 AND r5.nation2 = r1.nation2 AND r5.date_debut < v.date_debut)
+
+        UNION
+
+        SELECT r2.nation1 FROM navires AS n 
+        JOIN capturer AS c ON n.navireID = c.navireID
+        JOIN relations_diplomatiques AS r2 ON r2.nation2 = c.nationalite
+        WHERE v.navireID = n.navireID
+        AND c.date_of_capture = (SELECT MAX(c5.date_of_capture) FROM capturer AS c5 WHERE c5.navireID = c.navireID AND c5.date_of_capture < v.date_debut)
+        AND r2.relation_diplomatique = 'en guerre' 
+        AND r2.date_debut = (SELECT MAX(r5.date_debut) FROM relations_diplomatiques AS r5 WHERE r5.nation1 = r2.nation1 AND r5.nation2 = r2.nation2 AND r5.date_debut < v.date_debut)
+
+
+    )
+       
+   
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT non_en_guerre
+CHECK (non_en_guerre() = 0);
 
 ---------------------------------------------
 

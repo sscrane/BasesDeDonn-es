@@ -61,6 +61,11 @@ DELIMITER ','
 --CSV HEADER
 ;
 
+COPY relations_diplomatiques(nation1, nation2, relation_diplomatique,date_debut)
+FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/relations_diplomatiques.csv'
+DELIMITER ','
+--CSV HEADER
+;
 
 
 
