@@ -261,14 +261,9 @@ begin
 return (
     SELECT COUNT(*) 
     FROM voyages AS v 
-    WHERE EXISTS (
-        SELECT * FROM voyages AS v2
-        JOIN voyages AS v3 ON v2.navireID = v3.navireID
-        WHERE v.navireID = v2.navireID
-        AND v2.date_fin + INTERVAL '2 week' > v3.date_debut
-        AND v2.date_debut <> v3.date_debut
-        AND v2.date_debut < v3.date_debut
-    )
+    JOIN voyages AS v2 ON v.navireID = v2.navireID
+    WHERE v.date_debut < v2.date_debut
+    AND v.date_fin + INTERVAL '2 week' > v2.date_debut
 );
 
 end;

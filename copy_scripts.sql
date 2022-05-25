@@ -1,5 +1,25 @@
-COPY nations(nationalite, continent)
+DROP TABLE IF EXISTS nations_temp;
+DROP TABLE IF EXISTS voyages_temp;
+
+CREATE TEMPORARY TABLE nations_temp
+   (
+      nationalite VARCHAR(30),
+    continent VARCHAR(30)
+   );
+
+COPY nations_temp(nationalite, continent)
 FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Nations.csv'--'../CSV_Fichiers/Nations.csv'
+DELIMITER ','
+--CSV HEADER
+;
+
+INSERT INTO nations
+SELECT nationalite, continent
+FROM nations_temp
+;
+
+COPY navires(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
+FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Navire.csv'
 DELIMITER ','
 --CSV HEADER
 ;
@@ -10,17 +30,27 @@ DELIMITER ','
 --CSV HEADER
 ;
 
-COPY navires(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Navire.csv'
-DELIMITER ','
---CSV HEADER
+CREATE TEMPORARY TABLE voyages_temp
+   (
+    navireID INT,
+    date_debut DATE,
+    date_fin DATE,
+    destination VARCHAR(30),
+    type_voyage VARCHAR(30),
+    classe_voyage VARCHAR(30)
+   )
 ;
 
-COPY voyages( date_debut, date_fin, destination, type_voyage, classe_voyage,navireID)
+COPY voyages_temp( date_debut, date_fin, destination, type_voyage, classe_voyage,navireID)
 FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Voyages.csv'
 DELIMITER ','
 -- KEYWORD TO AVOID BULK INSERT
 --CSV HEADER
+;
+
+INSERT INTO voyages
+SELECT navireID,date_debut, date_fin, destination, type_voyage, classe_voyage
+FROM voyages_temp
 ;
 
 
