@@ -57,6 +57,30 @@ CREATE TABLE voyages(
 
 ---------------------------------------------
 
+create function alliance_commerciaux_check()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+
+-- check for each voyage, if the ship is in "commercial allies" then the destination or etape 0 is it's country and destination or etape 0 is other country
+-- check for each country that is a commercial allie, that each of it's ships is only doing nation1--> nation2 voyages 
+
+
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT alliance_commerciaux_check
+CHECK (alliance_commerciaux_check() = 0);
+
+---------------------------------------------
+
 -- Check that for ship of nation X arriving at/departing from nation Y, that the most recent relation between X and Y isn’t ‘en guerre’
 
 create function non_en_guerre()
