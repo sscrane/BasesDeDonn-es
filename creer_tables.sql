@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS nations;
 DROP TABLE IF EXISTS relations_diplomatiques;
 DROP FUNCTION IF EXISTS pleine_cale_ou_max_passagers;
 DROP FUNCTION IF EXISTS deux_semaines_entre_voyages;
+DROP FUNCTION IF EXISTS produits_verification;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -50,6 +51,39 @@ CREATE TABLE voyages(
     PRIMARY KEY (date_debut, navireID),
     CHECK (date_debut < date_fin)
 );
+
+
+create function produits_verification()
+   returns INT 
+   language plpgsql
+  as
+$$
+begin
+
+return (
+    -- select number of voyages that are not short and contain cargo that is perissable
+    SELECT COUNT(*)
+    FROM voyages AS v
+    WHERE v.type_voyage <> 'Court'
+    AND EXISTS (
+        SELECT * FROM voyages AS v2 
+        NATURAL JOIN etapes_transitoires AS e
+        NATURAL JOIN quantite AS q
+        JOIN produits AS p ON q.produitsID = p.produitsID
+        WHERE p.type_produit = 'Perissable'
+        AND v2.navireID = v.navireID AND v2.date_debut = v.date_debut
+    )
+);
+
+end;
+$$;
+
+ALTER TABLE voyages
+ADD CONSTRAINT produits_verification
+CHECK (produits_verification() = 0);
+
+---------------------------------------------
+
 
 create function deux_semaines_entre_voyages()
    returns INT 
@@ -150,6 +184,8 @@ CREATE TABLE quantite(
     produitsID INT,
     quantite INT,
     PRIMARY KEY (etape_numero, date_debut, navireID, produitsID),
+    FOREIGN KEY (etape_numero, date_debut, navireID) 
+        REFERENCES etapes_transitoires (etape_numero, date_debut, navireID),
     FOREIGN KEY(produitsID) REFERENCES produits(produitsID),
     FOREIGN KEY(navireID) REFERENCES navires(navireID)
 );
