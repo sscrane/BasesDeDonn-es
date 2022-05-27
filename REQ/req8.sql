@@ -2,6 +2,8 @@
 
 -- an average of the max length voyages for each size of ship 
 
+\echo Sélectionnez une moyenne de la longueur maximale des voyages pour chaque taille de navire. 
+
 SELECT AVG(max_lengths) 
 FROM (
     -- max voyages for each size of ship

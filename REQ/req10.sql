@@ -4,6 +4,8 @@
 
 -- where it doesnt exist that there exists a continent that hasn't visited the port
 
+\echo Ports qui ont été visités par un navire de chaque continent 
+
 SELECT DISTINCT e.port_nom
 FROM etapes_transitoires AS e
 WHERE NOT EXISTS (

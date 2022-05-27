@@ -2,6 +2,8 @@
 
 -- what is the longest serving ship?
 
+\echo Déterminer le navire ayant le plus dancienneté (la plus longue durée entre le premier et le dernier voyage)
+
 -- join voyages together, see the interval for each ship between first date_debut and last date_fini and find the max
 
 SELECT v1.navireID
