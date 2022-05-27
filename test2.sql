@@ -3,7 +3,7 @@
 JOIN voyages AS v on q.date_debut = v.date_debut AND q.navireID = v.navireID
 JOIN navires AS n on v.navireid = n.navireid
 GROUP BY q.navireid, n.volume;*/
-
+/*
 SELECT q.navireid, q.etape_numero, q.date_debut, SUM(q.quantite * p.volume), 
 ROUND(AVG(n.volume ), 2) AS volume, ROUND(SUM(q.quantite * p.volume)/AVG(n.volume ), 2) AS capacity_filled
 FROM quantite q
@@ -18,4 +18,10 @@ FROM quantite q
 JOIN navires AS n ON q.navireid = n.navireid
 GROUP BY q.navireid, q.etape_numero, q.date_debut
 ORDER BY q.navireid
+;*/
+
+SELECT e.navireid, n.initial_propietaire,  COUNT(e.navireID) FROM etapes_transitoires e 
+JOIN navires AS n ON e.navireID = n.navireID
+GROUP BY e.navireID, n.initial_propietaire
 ;
+
