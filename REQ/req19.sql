@@ -1,5 +1,8 @@
 -- SELECT max voyage By each country that is in europe 
 -- GROUP BY (country) HAVING continent = "europe"
+\echo
+\echo La durée maximale dun voyage pour chaque pays dEurope 
+\echo
 
 SELECT MAX(ABS(v.date_debut-v.date_fin)), c.nationalite
 FROM voyages AS v

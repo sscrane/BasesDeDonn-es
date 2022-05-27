@@ -1,9 +1,9 @@
 -- une requˆete impliquant le calcul de deux agr´egats (par exemple, les moyennes d’un ensemble de maximums)
 
 -- an average of the max length voyages for each size of ship 
-
+\echo
 \echo Sélectionnez une moyenne de la longueur maximale des voyages pour chaque taille de navire. 
-
+\echo
 SELECT AVG(max_lengths) 
 FROM (
     -- max voyages for each size of ship

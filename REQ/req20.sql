@@ -1,5 +1,7 @@
 -- List of total amount of products by country -- La quantité de produits reçus par chaque pays
-
+\echo
+\echo La quantité de produits reçus par chaque pays
+\echo
 SELECT port.nationalite, p.nom, SUM(q.quantite)
 FROM quantite q
 JOIN voyages v ON q.date_debut = v.date_debut AND q.navireid = v.navireid
