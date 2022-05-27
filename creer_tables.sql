@@ -17,6 +17,7 @@ DROP FUNCTION IF EXISTS produits_verification;
 DROP FUNCTION IF EXISTS intercontinental_taille_5;
 DROP FUNCTION IF EXISTS taille_port_navire;
 DROP FUNCTION IF EXISTS non_en_guerre;
+DROP FUNCTION IF EXISTS alliance_commerciaux_check;
 
 CREATE TABLE nations(
     nationalite VARCHAR(30) PRIMARY KEY,
@@ -36,8 +37,8 @@ CREATE TABLE navires(
     navireID SERIAL PRIMARY KEY,
     navire_type VARCHAR(30),
     taille_categorie INTEGER CHECK (taille_categorie BETWEEN 1 AND 5) NOT NULL, 
-    volume INT NOT NULL CHECK (volume >= 0),
-    nombre_passagers INT NOT NULL CHECK (nombre_passagers >= 0),
+    volume INT CHECK (volume >= 0),
+    nombre_passagers INT CHECK (nombre_passagers >= 0),
     initial_propietaire VARCHAR(30),
     FOREIGN KEY (initial_propietaire) REFERENCES nations(nationalite)
 );
@@ -426,7 +427,6 @@ ADD CONSTRAINT pleine_cale_ou_max_passagers
 check (pleine_cale_ou_max_passagers() = 0);
 
 
-
 CREATE TABLE produits(
     produitsID SERIAL PRIMARY KEY,
     nom VARCHAR(30),
@@ -458,11 +458,6 @@ CREATE TABLE sec(
     volume INT CHECK (volume>0),
     FOREIGN KEY(produitsID) REFERENCES produits(produitsID)
 );
-
-/*CREATE TABLE personnes(
-    produitsID INT PRIMARY KEY,
-    FOREIGN KEY(produitsID) REFERENCES produits(produitsID)
-);*/
 
 CREATE TABLE capturer (
     date_of_capture DATE,
