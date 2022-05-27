@@ -64,7 +64,83 @@ create function alliance_commerciaux_check()
 $$
 begin
 
-return (
+return ( 
+
+SELECT COUNT(*) 
+FROM voyages AS v
+NATURAL JOIN navires AS n
+JOIN capturer AS c ON c.navireID = n.navireID
+JOIN ports_ AS p_dest ON v.destination = p_dest.nom
+JOIN etapes_transitoires AS e ON e.etape_numero = 1 AND v.date_debut = e.date_debut AND v.navireID = e.navireID
+JOIN ports_ AS p_debut ON e.port_nom = p_debut.nom
+WHERE c.date_of_capture = (SELECT MAX(c5.date_of_capture) FROM capturer AS c5 WHERE c5.navireID = c.navireID AND c5.date_of_capture < v.date_debut)
+AND  (
+    SELECT r.nation1 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation2 = c.nationalite
+
+    UNION 
+
+    SELECT r.nation2 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation1 = c.nationalite
+
+    LIMIT 1
+    -- country that c.nationalite is commercial ally with 
+
+)  IS NOT NULL 
+AND (( 
+    -- destination country is ship nation
+    p_dest.nom = (
+        -- get ships nation here
+        c.nationalite
+    )
+    AND
+    -- etape 0 country is ally nation 
+    p_debut.nationalite = (
+        -- get ally nation here
+        SELECT r.nation1 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation2 = c.nationalite
+
+    UNION 
+
+    SELECT r.nation2 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation1 = c.nationalite
+
+    LIMIT 1
+
+    )
+
+)
+OR (
+    -- destination country is ally nation
+    p_dest.nom = (
+        -- get ally nation here
+        SELECT r.nation1 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation2 = c.nationalite
+
+    UNION 
+
+    SELECT r.nation2 FROM relations_diplomatiques AS r
+    WHERE r.relation_diplomatique = 'allies commerciaux'
+    AND r.nation1 = c.nationalite
+
+    LIMIT 1
+
+    ) 
+    AND 
+    -- etape 0 country is ship nation
+    p_debut.nationalite = (
+        -- get ships nation here
+        c.nationalite
+    )
+    
+))
+
+
 
 -- check for each voyage, if the ship is in "commercial allies" 
 -- then the destination or etape 0 is it's country 
@@ -289,7 +365,7 @@ CREATE TABLE etapes_transitoires(
     FOREIGN KEY (port_nom) REFERENCES ports_(nom)
 );
 
-/*
+
 
 create function pleine_cale_ou_max_passagers()
    returns INT 
@@ -297,35 +373,47 @@ create function pleine_cale_ou_max_passagers()
   as
 $$
 begin
-
+    return (
     SELECT COUNT(*)
     FROM etapes_transitoires AS e
     NATURAL JOIN navires AS n
-    JOIN quantite AS q ON e.etape_numero = q.etape_numero AND e.navireID = q.navireID AND e.date_debut = q.date_debut
-    WHERE e.etape_numero = 0
+    WHERE e.etape_numero = 1
     AND ( 
         -- calculate total volume of cargo
-        SELECT SUM(*) FROM (
-            -- list of quantite * volume of product
-            SELECT q3.quantite * per.volume * sec.volume
-            FROM quantite AS q3 
-            JOIN produits AS p2 ON q3.produitsID = p2.produitsID
-            JOIN perissable AS per ON p2.produitsID = per.produitsID
-            JOIN sec AS sec ON p2.produitsID = sec.produitsID
-            WHERE q3.navireID = e.navireID
-            AND q3.date_debut = e.date_debut
-            AND q3.etape_numero = e.etape_numero
-            AND p2.type_produit <> 'Personnes'
-        ) AS x) = n.volume
-    OR ( -- count de passagers 
+        SELECT SUM(product_total_volume) FROM (
+            -- sec volumes
+            SELECT s1.volume * q1.quantite AS product_total_volume 
+            FROM etapes_transitoires AS e2
+            NATURAL JOIN quantite AS q1
+            JOIN produits AS p1 ON q1.produitsID = p1.produitsID
+            JOIN sec AS s1 ON p1.produitsID = s1.produitsID
+            WHERE e2.etape_numero = 1
+            AND e.etape_numero = e2.etape_numero AND e.navireID = e2.navireID AND e.date_debut = e2.date_debut
+            AND p1.type_produit = 'Sec'
+
+            UNION ALL
+            -- perissable volumes 
+            SELECT pp1.volume * q2.quantite AS product_total_volume 
+            FROM etapes_transitoires AS e3
+            JOIN quantite AS q2 ON q2.etape_numero = e3.etape_numero AND q2.date_debut = e3.date_debut AND q2.navireID = e3.navireID
+            JOIN produits AS p2 ON q2.produitsID = p2.produitsID
+            JOIN perissable AS pp1 ON p2.produitsID = pp1.produitsID
+            WHERE e3.etape_numero = 1
+            AND e.etape_numero = e3.etape_numero AND e.navireID = e3.navireID AND e.date_debut = e3.date_debut
+            AND p2.type_produit = 'Perissable'
+
+
+        ) AS x
+        ) <> n.volume
+    AND ( -- count de passagers 
         SELECT COUNT(*) 
-        FROM etapes_transitoires AS e2
-        JOIN quantite AS q2 ON e2.etape_numero = q2.etape_numero AND e2.navireID = q2.navireID AND e2.date_debut = q2.date_debut
-        JOIN produits AS p ON q2.produitsID = p.produitsID
-        WHERE e2.etape_numero = e.etape_numero
-        AND e2.date_debut = e.date_debut
-        AND e2.navireID = e.navireID
-        AND p.type_produit = 'Personnes' ) = n.nombre_passagers
+        FROM etapes_transitoires AS e4
+        NATURAL JOIN quantite AS q3
+        JOIN produits AS p3 ON q3.produitsID = p3.produitsID
+        WHERE p3.type_produit = 'Personnes'
+        AND e.etape_numero = e4.etape_numero AND e.navireID = e4.navireID AND e.date_debut = e4.date_debut
+        )<> n.nombre_passagers
+    )
     ;
 -- check for each etape 0, that either the cargo is full or there is a max num of passengers 
 end;
@@ -333,9 +421,9 @@ $$;
 
 ALTER TABLE etapes_transitoires
 ADD CONSTRAINT pleine_cale_ou_max_passagers
-check (pleine_cale_ou_max_passagers() = 1);
+check (pleine_cale_ou_max_passagers() = 0);
 
-*/
+
 
 CREATE TABLE produits(
     produitsID SERIAL PRIMARY KEY,
