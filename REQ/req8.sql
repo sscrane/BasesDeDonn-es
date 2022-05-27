@@ -1,11 +1,15 @@
 -- une requˆete impliquant le calcul de deux agr´egats (par exemple, les moyennes d’un ensemble de maximums)
 
--- the average of (max volumes held on each ship at etape 0 per country)
+-- an average of the max length voyages for each size of ship 
 
-SELECT AVG(max_volume) FROM (
-    SELECT MAX()
-    FROM etapes_transitoires AS e
-    JOIN navires AS n ON e.navireID = n.navireID
-    JOIN capturer AS c ON n.navireID = c.navireID
+SELECT AVG(max_lengths) 
+FROM (
+    -- max voyages for each size of ship
+    SELECT MAX(ABS(v.date_debut - v.date_fin)) AS max_lengths, n.taille_categorie
+    FROM voyages AS v
+    JOIN navires AS n ON v.navireID = n.navireID
+    GROUP BY n.taille_categorie
 
-)
+) 
+
+AS x;
