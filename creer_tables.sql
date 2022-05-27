@@ -159,6 +159,8 @@ ALTER TABLE voyages
 ADD CONSTRAINT alliance_commerciaux_check
 CHECK (alliance_commerciaux_check() = 0);
 
+
+
 ---------------------------------------------
 
 -- Check that for ship of nation X arriving at/departing from nation Y, that the most recent relation between X and Y isn’t ‘en guerre’
