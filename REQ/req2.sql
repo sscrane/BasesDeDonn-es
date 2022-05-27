@@ -1,9 +1,9 @@
 -- une ’auto jointure’ (jointure de deux copies d’une même table)
 
 -- what is the longest serving ship?
-
+\echo
 \echo Déterminer le navire ayant le plus dancienneté (la plus longue durée entre le premier et le dernier voyage)
-
+\echo
 -- join voyages together, see the interval for each ship between first date_debut and last date_fini and find the max
 
 SELECT v1.navireID

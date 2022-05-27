@@ -1,6 +1,7 @@
 -- une requête qui porte sur au moins trois tables ;
-
+\echo
 \echo Le pourcentage déspace de cargo dun navire spécific qui est utilisé pendant une etape
+\echo
 -- Amount of cargo filled by a certain ship on on a certain etape -
 
 SELECT q.navireid, q.etape_numero, q.date_debut, SUM(q.quantite * p.volume),

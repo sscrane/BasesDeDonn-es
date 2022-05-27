@@ -3,8 +3,9 @@
 -- ports that have been visited by a ship from each continent 
 
 -- the count of ships from continents that have visited the port is the count of continents
-
-
+\echo 
+\echo Ports qui ont été visités par un navire de chaque continent 
+\echo 
 SELECT DISTINCT e.port_nom
 FROM etapes_transitoires AS e
 NATURAL JOIN navires AS n

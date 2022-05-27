@@ -1,5 +1,9 @@
 -- which nation has been at war with the most nations? 
 
+\echo 
+\echo la nation qui a été en guerre avec le plus de nations
+\echo
+
 SELECT (nation_res) FROM (
     
 SELECT r1.nation1 AS nation_res

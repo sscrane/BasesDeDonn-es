@@ -2,7 +2,9 @@
 -- bateau sur un laps de temps recouvrant des voyages diff´erents).
 
 -- route taken by ship 1 from 2020/01/01 to 2022/01/01
-
+\echo 
+\echo le trajet emprunté par le navire 1 du 2020/01/01 au 2022/01/01
+\echo 
 WITH RECURSIVE nav_route(ville_départ, ville_arrivée) AS
 (
 SELECT * FROM voyages AS v

@@ -3,9 +3,9 @@
 -- ports that have been visited by a ship from each continent 
 
 -- where it doesnt exist that there exists a continent that hasn't visited the port
-
+\echo
 \echo Ports qui ont été visités par un navire de chaque continent 
-
+\echo
 SELECT DISTINCT e.port_nom
 FROM etapes_transitoires AS e
 WHERE NOT EXISTS (
