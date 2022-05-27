@@ -63,7 +63,7 @@ CREATE TEMPORARY TABLE ports_temp
 COPY ports_temp(nom, longitude, latitude, nationalite, taille_categorie)
 FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Ports.csv'
 --FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/ports.csv'
-DELIMITER ','
+WITH (FORMAT CSV, DELIMITER ',')
 --CSV HEADER
 ;
 
@@ -96,13 +96,6 @@ SELECT navireID,date_debut, date_fin, destination, type_voyage, classe_voyage
 FROM voyages_temp
 ;
 
-/*
-COPY etapes_transitoires(etape_numero, date_debut, navireID, port_nom)
-FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
---FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
-DELIMITER ','
---CSV HEADER
-;*/
 CREATE TEMPORARY TABLE etapes_temp
    (
     etape_numero INT,
@@ -122,14 +115,6 @@ FROM etapes_temp
 ;
 
 
-/*
-COPY produits(nom, type_produit)
-FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
---FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
-DELIMITER ','
---CSV HEADER
-;*/
-
 CREATE TEMPORARY TABLE produits_temp
    (
       produitsID SERIAL PRIMARY KEY,
@@ -148,15 +133,6 @@ INSERT INTO produits
 SELECT produitsID, nom, type_produit
 FROM produits_temp
 ;
-
-
-/*
-COPY quantite(etape_numero, date_debut, navireID, produitsID, quantite)
-FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
---FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
-WITH --DELIMITER ','
-(FORMAT CSV, DELIMITER ',')
-;*/
 
 CREATE TEMPORARY TABLE quantite_temp
    (
@@ -178,15 +154,6 @@ INSERT INTO quantite
 SELECT etape_numero, date_debut, navireID, produitsID, quantite
 FROM quantite_temp
 ;
-
-
-/*
-COPY perissable(produitsID, date_conservation, volume)
-FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
---FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
-DELIMITER ','
---CSV HEADER
-;*/
 
 CREATE TEMPORARY TABLE perissable_temp
    (
