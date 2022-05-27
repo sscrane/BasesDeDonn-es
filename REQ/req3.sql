@@ -1,6 +1,7 @@
 -- une sous-requête corrélée ;
 
 -- choose a port that have ships of each size come to it 
+\echo Les ports qui reçoivent des navires de chaque catégorie de taille.
 
 SELECT DISTINCT e.port_nom
 FROM etapes_transitoires AS e
