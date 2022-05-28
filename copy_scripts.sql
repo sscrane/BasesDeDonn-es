@@ -19,8 +19,8 @@ CREATE TEMPORARY TABLE nations_temp
    );
 
 COPY nations_temp(nationalite, continent)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Nations.csv'--'../CSV_Fichiers/Nations.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/nations.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Nations.csv'--'../CSV_Fichiers/Nations.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/nations.csv'
 DELIMITER ','
 --CSV HEADER
 ;
@@ -40,8 +40,8 @@ CREATE TEMPORARY TABLE navires_temp
    );
 
 COPY navires_temp(navire_type, taille_categorie, volume, nombre_passagers, initial_propietaire)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Navire.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/navire.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Navire.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/navire.csv'
 WITH (FORMAT CSV, DELIMITER ',')
 --CSV HEADER
 ;
@@ -61,8 +61,8 @@ CREATE TEMPORARY TABLE ports_temp
    );
 
 COPY ports_temp(nom, longitude, latitude, nationalite, taille_categorie)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Ports.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/ports.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Ports.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/ports.csv'
 WITH (FORMAT CSV, DELIMITER ',')
 --CSV HEADER
 ;
@@ -84,8 +84,8 @@ CREATE TEMPORARY TABLE voyages_temp
 ;
 
 COPY voyages_temp( date_debut, date_fin, destination, type_voyage, classe_voyage,navireID)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Voyages.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/voyages.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Voyages.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/voyages.csv'
 DELIMITER ','
 -- KEYWORD TO AVOID BULK INSERT
 --CSV HEADER
@@ -105,8 +105,8 @@ CREATE TEMPORARY TABLE etapes_temp
    )
 ;
 COPY etapes_temp(etape_numero, date_debut, navireID, port_nom)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Etapes_Transitoires.csv'
 DELIMITER ','
 ;
 INSERT INTO etapes_transitoires
@@ -124,8 +124,8 @@ CREATE TEMPORARY TABLE produits_temp
 ;
 
 COPY produits_temp(nom, type_produit)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Produits.csv'
 DELIMITER ','
 
 ;
@@ -145,8 +145,8 @@ CREATE TEMPORARY TABLE quantite_temp
 ;
 
 COPY quantite_temp(etape_numero, date_debut, navireID, produitsID, quantite)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Quantite.csv'
 WITH (FORMAT CSV, DELIMITER ',')
 ;
 
@@ -164,8 +164,8 @@ CREATE TEMPORARY TABLE perissable_temp
 ;
 
 COPY perissable_temp(produitsID, date_conservation, volume)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Perissable.csv'
 WITH (FORMAT CSV, DELIMITER ',')
 ;
 
@@ -182,8 +182,8 @@ CREATE TEMPORARY TABLE sec_temp
 ;
 
 COPY sec_temp(produitsID, volume)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Sec.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Sec.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Sec.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Sec.csv'
 WITH (FORMAT CSV, DELIMITER ',')
 ;
 
@@ -201,8 +201,8 @@ CREATE TEMPORARY TABLE capturer_temp
 ;
 
 COPY capturer_temp(date_of_capture, navireID, nationalite)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Capturer.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Capturer.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/Capturer.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/Capturer.csv'
 DELIMITER ','
 ;
 
@@ -221,8 +221,8 @@ CREATE TEMPORARY TABLE relations_diplomatiques_temp
 ;
 
 COPY relations_diplomatiques_temp(nation1, nation2, relation_diplomatique, date_debut)
---FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/relations_diplomatiques.csv'
-FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/relations_diplomatiques.csv'
+FROM '/Users/sophiecrane/DB/BasesDeDonn-es/CSV_Fichiers/relations_diplomatiques.csv'
+--FROM '/Users/sashayeutseyeva/Documents/BD/BasesDeDonn-es/CSV_Fichiers/relations_diplomatiques.csv'
 DELIMITER ','
 ;
 
