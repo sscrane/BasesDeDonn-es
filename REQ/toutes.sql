@@ -148,6 +148,43 @@ HAVING COUNT(DISTINCT nat.continent) =(
 )
 ;
 
+\echo
+\echo REQUETE 12: Sélectionnez lidentifiant du produit, sa quantité et sa date de conservation qui a la plus longue date de conservation.
+\echo
+
+SELECT DISTINCT q.produitsid, q.quantite, p.date_conservation FROM quantite q
+JOIN perissable AS p ON q.produitsID = p.produitsID
+WHERE p.date_conservation = (
+    SELECT MAX(perissable.date_conservation) 
+    FROM perissable);
+
+
+
+\echo
+\echo REQUETE 13: Sélectionnez lidentifiant du produit, sa quantité et sa date de conservation qui a la plus longue date de conservation.
+\echo
+
+SELECT DISTINCT q.produitsid, q.quantite, p.date_conservation FROM quantite q
+JOIN perissable AS p ON q.produitsID = p.produitsID
+WHERE p.date_conservation >= ALL (
+    SELECT perissable.date_conservation 
+    FROM perissable);
+
+--On peut ajouter "IS NOT NULL"...
+
+\echo
+\echo REQUETE 13 avec modifications: Avec quelque modifications: Sélectionnez lidentifiant du produit, sa quantité et sa date de conservation qui a la plus longue date de conservation.
+\echo
+
+SELECT DISTINCT q.produitsid, q.quantite, p.date_conservation FROM quantite q
+JOIN perissable AS p ON q.produitsID = p.produitsID
+WHERE p.date_conservation >= ALL (
+    SELECT perissable.date_conservation 
+    FROM perissable
+    WHERE perissable.date_conservation IS NOT NULL);    
+
+
+
 \echo 
 \echo REQUETE 14: Le trajet emprunté par le navire 1 du 2020/01/01 au 2022/01/01
 \echo 

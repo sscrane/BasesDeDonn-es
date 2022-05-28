@@ -5,6 +5,10 @@
 -- (dans l’esprit de ce qui a été présenté en cours)
 --  afin qu’elles retournent le même résultat
 
+\echo
+\echo Sélectionnez lidentifiant du produit, sa quantité et sa date de conservation qui a la plus longue date de conservation.
+\echo
+
 SELECT DISTINCT q.produitsid, q.quantite, p.date_conservation FROM quantite q
 JOIN perissable AS p ON q.produitsID = p.produitsID
 WHERE p.date_conservation = (
