@@ -1,11 +1,11 @@
-# BasesDeDonnes
+# Bases De Données
 
-Nom: Yeutseyeva \n
-Prénom: Sasha \n
-Numéro d'etudiant: 22121616 \n\n
+Nom: Yeutseyeva 
+Prénom: Sasha 
+Numéro d'etudiant: 22121616 
 
-Nom: Crane \n
-Prénom: Sophie \n
+Nom: Crane 
+Prénom: Sophie 
 Numéro d'etudiant: ??
 
 creer_tables.sql:
