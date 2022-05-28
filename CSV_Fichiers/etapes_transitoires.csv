@@ -1,17 +1,46 @@
-1,2020-01-01,1,Port de Marseille
-1,2020-07-15,1,Port d'Algesiras
-1,2020-10-10,1,Port de Gênes
+1,2020-01-01,1,Port de Gênes
 1,2020-01-19,2,Port de Barcelone
-1,2020-04-30,4,Port de Trieste
+1,2020-03-10,3,Royan
+2,2020-03-10,3,Port de Marseille
+1,2020-07-10,4,Port de Marseille
+1,2020-07-11,7,Port de Calais
+1,2020-08-08,8,Port de Calais
+1,2020-08-12,20,Port of New York
 1,2020-05-26,9,Port de Barcelone
+1,2020-07-15,1,Port d'Algesiras
+2,2020-07-15,1,Port de Gênes
+1,2020-08-16,4,Port de Gênes
+1,2020-08-17,3,Port d'Algesiras
 1,2020-07-20,5,Port de Calais
+1,2020-08-23,7,Port de Barcelone
+1,2020-08-22,30,Caligari
+2,2020-08-22,30,Catane
+1,2020-09-20,11,Port de Calais
+1,2021-01-20,20,Port of New York
+1,2020-10-01,12,Port de Gênes
+1,2020-11-03,15,Royan
+2,2020-11-03,15,Port de Calais
+1,2020-09-26,41,Port de Barcelone
 1,2020-10-9,2,Port de Gênes
 1,2020-11-08,30,Port d'Algesiras
+2,2020-11-08,30,Port de Barcelone
 1,2021-01-01,28,Port de Trieste
+1,2020-01-25,4,Royan
 1,2020-11-20,5,Caligari
+1,2021-01-06,6,Royan
 1,2021-02-05,7,Royan
 1,2021-02-20,11,Port de Marseille
 1,2021-03-03,35,Port de Trieste
 1,2021-03-24,8,Royan
-1,2020-03-11,18,Port de Marseille
-1,2025-01-01,8,Port de Trieste
+1,2020-03-11,18,Port of New York
+2,2020-03-11,18,Port de Marseille
+1,2020-04-20,16,Port of Pittsburgh
+2,2020-04-20,16,Mount Vernon
+1,2020-08-12,18,Port de Shanghai
+1,2020-03-11,17,Port de Shanghai
+2,2020-03-11,17,Port de Nagoya
+1,2020-09-20,17,Port de Shanghai
+1,2020-12-12,17,Port de Nagoya
+1,2020-01-12,42,Port of New York
+2,2020-01-12,42,Port of Pittsburgh
+1,2020-01-11,18,Port of South Louisiana

@@ -1,15 +1,15 @@
-Flute,1,,200,La Chine
+Flute,1,200,200,La Chine
 Flute,5,600,300,L'Espagne
-Flute,5,500,400,La France
-Flute,5,,150,L'Italie
-Flute,4,400,150,L'Espagne
-Flute,4,400,150,La Chine
+Flute,4,500,400,La France
+Flute,4,300,150,L'Italie
+Flute,3,400,150,L'Espagne
+Flute,3,400,150,La Chine
 Flute,4,425,100,Le Japon
 Flute,4,450,150,L'Italie
 Flute,4,425,125,La Chine
 Flute,4,375,125,L'Espagne
 Flute,4,400,150,La Chine
-Flute,4,450,,Les Etats-Unis
+Flute,4,450,500,Les Etats-Unis
 Flute,3,400,100,L'Italie
 Flute,3,375,75,Le Japon
 Flute,3,350,75,Le Japon
@@ -23,7 +23,7 @@ Galion,5,650,100,Le Japon
 Galion,5,640,150,Les Etats-Unis
 Galion,4,400,150,La France
 Galion,4,210,80,La Chine
-Galion,4,,70,L'Italie
+Galion,4,300,70,L'Italie
 Galion,4,220,120,L'Espagne
 Gabare,3,150,150,Les Etats-Unis
 Gabare,3,300,100,Les Etats-Unis
@@ -36,6 +36,7 @@ Gabare,3,100,125,L'Espagne
 Gabare,3,200,125,La Chine
 Gabare,2,150,100,Les Etats-Unis
 Gabare,2,200,75,Le Japon
-Gabare,2,,50,Les Etats-Unis
-Gabare,1,150,,Les Etats-Unis
+Gabare,2,200,50,Les Etats-Unis
+Gabare,1,150,350,Les Etats-Unis
 Gabare,1,100,50,L'Italie
+Galion,5,525,180,Le Japon
