@@ -19,4 +19,3 @@ REQ: Dossier avec toutes les requêtes.
 
 toutes.sql: Fichier avec toutes les requêtes. 
 
-Autres points: 
