@@ -49,7 +49,7 @@ CREATE TABLE voyages(
     date_fin DATE,
     destination VARCHAR(30),
     type_voyage VARCHAR(30) CHECK (type_voyage IN ('Court', 'Moyen', 'Long')),
-    classe_voyage VARCHAR(30) CHECK (classe_voyage IN ('Europe', 'Amérique', 'Asie', 'Intercontinental')),
+    classe_voyage VARCHAR(30) CHECK (classe_voyage IN ('Europe', 'Amérique', 'Asie', 'Afrique','Intercontinental')),
     FOREIGN KEY (navireID) REFERENCES navires(navireID),
     FOREIGN KEY (destination) REFERENCES ports_(nom),
     PRIMARY KEY (date_debut, navireID),

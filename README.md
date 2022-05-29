@@ -15,6 +15,6 @@ creer_tables.sql: Le fichier pour créer les tables. Il contient les tables suiv
 
 copy_scripts.sql: Avec ce fichier on alimente les tables avec les fichiers CSV. Il faut utiliser les tables temporaires pour copier les données avant qu'on peut les mettre dans les tables qu'on a fait plus tôt.
 
-REQ: 
+REQ: \i toutes.sql pour exécuter toutes les scripts
 
 Autres points: 
