@@ -15,6 +15,9 @@ creer_tables.sql: Le fichier pour créer les tables. Il contient les tables suiv
 
 copy_scripts.sql: Avec ce fichier on alimente les tables avec les fichiers CSV. Il faut utiliser les tables temporaires pour copier les données avant qu'on peut les mettre dans les tables qu'on a fait plus tôt.
 
+modelisation_preliminaire.pdf: Un pdf de notre modélisation preliminaire.
+modelisation_finale.pdf: Un pdf de notre modélisation final.
+
 REQ: Dossier avec toutes les requêtes. 
 
 toutes.sql: Fichier avec toutes les requêtes. 
